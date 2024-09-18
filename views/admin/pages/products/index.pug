@@ -1,0 +1,128 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-filter.pug
+block main
+  h1 Danh sách sản phẩm
+  .card-mb-3
+    .card-header Bộ lọc
+    .card-body
+      .row
+        .col-4
+          +box-filter([
+            {
+              label: "Tất cả",
+              value: ""
+            },
+            {
+              label: "Hoạt động" ,
+              value: "active"
+            },
+            {
+              label: "Dừng hoạt động",
+              value: "inactive"
+            }
+          ])      
+          
+        .col-8 
+          include ../../partials/form-search.pug  
+      
+  .card
+    .card-header Danh sách 
+    .card-body
+      .row.mb-3
+        .col-6
+          form(
+            form-change-multi
+            data-path=`/${prefixAdmin}/products/change-multi`
+          )
+            .input-group
+              select(name="status" class="form-control")
+                option(value="active") Hoạt động
+                option(value="inactive") Dừng hoạt động
+                option(value="delete") Xoá
+              .input-group-append
+                button(
+                  class="btn btn-success"
+                  type="submit"
+                ) Áp dụng
+        .col-6.text-right
+          a(
+            href=`/${prefixAdmin}/products/create`
+            class = "btn btn-outline-success"
+            ) + Thêm mới
+
+        table.table.table-hover.table-sm
+          thead
+            tr
+              th 
+              th STT
+              th Hình ảnh
+              th Tiêu đề
+              th Giá
+              th Vị trí
+              th Trạng thái
+              th Hành động
+
+          tbody
+          each item, index in products
+              tr 
+                td
+                  input(
+                    type = "checkbox"
+                    input-change = item.id
+                    )
+                td #{index + 1}
+                td
+                  img(
+                    src=item.thumbnail
+                    alt=item.title
+                    width="100px"
+                    height="auto"
+                  )
+                td #{item.title}
+                td #{item.price}$
+                td
+                  input(
+                    type="number"
+                    value=item.position
+                    item-id=item.id
+                    data-path=`/${prefixAdmin}/products/change-position`
+                    input-position
+                    style="width: 60px;"
+                  )
+                td
+                  if(item.status == "active")
+                    button(
+                      class="badge badge-success"
+                      button-change-status = "inactive"
+                      item-id = item.id
+                      data-path=`/${prefixAdmin}/products/change-status`
+                      ) Hoạt động
+                  else if (item.status == "inactive")
+                    button(
+                      class="badge badge-danger"
+                      button-change-status = "active"
+                      item-id = item.id
+                      data-path=`/${prefixAdmin}/products/change-status`
+                      ) Dừng hoạt động
+                td
+                  button(class="btn btn-warning btn-sm") Sửa
+                  button(
+                    class="btn btn-danger btn-sm ml-1"
+                    item-id = item.id 
+                    data-path = `/${prefixAdmin}/products/delete`
+                    button-delete
+                    ) Xóa
+  
+  nav(class="mt-3")
+    ul(class="pagination")
+      if(currentPage > 1) 
+        li(class = "page-item")
+          button(class = "page-link" button-pagination = currentPage - 1) Trang trước
+      - for (var i = 1; i <= totalPage; i++)
+        li(class="page-item")
+          button(class="page-link" button-pagination=i) #{i}
+      
+      if(currentPage < totalPage) 
+        li(class = "page-item")
+          button(class = "page-link" button-pagination = currentPage + 1) Kế tiếp
+      
