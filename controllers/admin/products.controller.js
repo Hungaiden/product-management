@@ -1,5 +1,5 @@
 const Product = require("../../models/product.models");
-
+const systemConfig = require("../../config/system");
 module.exports.index = async (req, res) => {
   const find = {
     deleted : false
@@ -169,7 +169,21 @@ module.exports.create = async (req, res) => {
 }
 
 module.exports.createPost = async(req, res) => {
-  console.log(req.body);
+  req.body.price = parseInt(req.body.price);
+  req.body.discountPercentage = parseInt(req.body.discountPercentage);
+  req.body.stock = parseInt(req.body.stock);
+  
+  if(req.body.position) {
+    req.body.position = parseInt(req.body.position);
+  }
+  else {
+    const count = await Product.countDocuments();
+    req.body.position = count + 1;
+  }
 
-  res.send("OK");
+  const record = new Product(req.body);
+
+  await record.save(); // đợi đến khi thêm bản ghi xong
+
+  res.redirect(`/${systemConfig.prefixAdmin}/products`);
 }
