@@ -105,7 +105,10 @@ block main
                       data-path=`/${prefixAdmin}/products/change-status`
                       ) Dừng hoạt động
                 td
-                  button(class="btn btn-warning btn-sm") Sửa
+                  a(
+                    class="btn btn-warning btn-sm"
+                     href=`/${prefixAdmin}/products/edit/${item.id}`
+                    ) Sửa
                   button(
                     class="btn btn-danger btn-sm ml-1"
                     item-id = item.id 
