@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const methodOverride = require('method-override')
 
 const app = express();
 require('dotenv').config();
@@ -18,6 +19,9 @@ app.set('views', './views');
 app.set('view engine', 'pug');
 
 app.use(express.static('public')); // Thiết lập thư mục chứa file tĩnh
+
+// override with POST having ?_method=DELETE
+app.use(methodOverride('_method'));
 
 app.locals.prefixAdmin = "admin";
 
