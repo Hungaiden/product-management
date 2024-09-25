@@ -46,7 +46,7 @@ module.exports.index = async (req, res) => {
   .limit(limitItems)
   .skip(skip)
   .sort({
-    position: "ascending"
+    position: "asc"
   });
 
   res.render("admin/pages/products/index", {
@@ -181,9 +181,6 @@ module.exports.createPost = async(req, res) => {
     req.body.position = count + 1;
   }
 
-  if(req.file) {
-    req.body.thumbnail = `/uploads/${req.file.filename}`
-  }
   
   const record = new Product(req.body);
 
@@ -215,10 +212,6 @@ module.exports.editPatch = async(req, res) => {
   
   if(req.body.position) {
     req.body.position = parseInt(req.body.position);
-  }
-
-  if(req.file) {
-    req.body.thumbnail = `/uploads/${req.file.filename}`
   }
 
   await Product.updateOne({
