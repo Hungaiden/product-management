@@ -1,4 +1,5 @@
 const express = require("express");
+var path = require('path');
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
@@ -32,10 +33,12 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
 // Flash
-// Flash
 app.use(cookieParser('JKSLSF'));
 app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
+
+/* New Route to the TinyMCE Node module */
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
 
 routeAdmin.index(app);
 routeClient.index(app); 
