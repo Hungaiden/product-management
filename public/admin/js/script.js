@@ -250,3 +250,33 @@ if(uploadImage) {
 }
 
 // End image preview
+
+
+// Sắp xếp
+const sortSelect = document.querySelector("[sort-select]");
+if(sortSelect) {
+  let url = new URL(location.href); // Nhân bản url
+  // Bắt sự kiện onChange
+  sortSelect.addEventListener("change", () => {
+    const value = sortSelect.value;
+    
+    if(value) {
+      const [sortKey, sortValue] = value.split("-");
+      console.log(sortKey);
+      console.log(sortValue);
+      url.searchParams.set("sortKey", sortKey);
+      url.searchParams.set("sortValue", sortValue);
+    } else {
+      url.searchParams.delete("sortKey");
+      url.searchParams.delete("sortValue");
+    }
+    location.href = url.href;
+  })
+  // Hiển thị lựa chọn mặc định
+  const sortKeyCurrent = url.searchParams.get("sortKey");
+  const sortValueCurrent = url.searchParams.get("sortValue");
+  if(sortKeyCurrent && sortValueCurrent) {
+    sortSelect.value = `${sortKeyCurrent}-${sortValueCurrent}`;
+  }
+}
+// Hết sắp xếp

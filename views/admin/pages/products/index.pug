@@ -24,7 +24,19 @@ block main
           
         .col-8 
           include ../../partials/form-search.pug  
-      
+  .card.mb-3
+    .card-header Sắp xếp
+    .card-body
+      .row
+        .col-4
+          select(class="form-control" sort-select)
+            option(value="position-desc") Vị trí giảm dần
+            option(value="position-asc") Vị trí tăng dần
+            option(value="price-desc") Giá giảm dần
+            option(value="price-asc") Giá tăng dần
+            option(value="title-desc") Tiêu đề từ Z đến A
+            option(value="title-asc") Tiêu đề từ A đến Z
+                
   .card
     .card-header Danh sách 
     .card-body
