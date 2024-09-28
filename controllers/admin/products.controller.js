@@ -1,4 +1,5 @@
 const Product = require("../../models/product.models");
+const ProductCategory = require("../../models/product-category.model")
 const systemConfig = require("../../config/system");
 module.exports.index = async (req, res) => {
   const find = {
@@ -172,8 +173,12 @@ module.exports.changePosition = async (req, res) => {
 }
 
 module.exports.create = async (req, res) => {
+  const listCategory = await ProductCategory.find({
+    deleted: false
+  });
   res.render("admin/pages/products/create", {
-    pageTitle: "Thêm mới sản phẩm"
+    pageTitle: "Thêm mới sản phẩm",
+    listCategory: listCategory
   });
 }
 
