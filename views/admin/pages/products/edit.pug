@@ -18,6 +18,21 @@ block main
         required
         value=product.title
       )
+
+    div(class="form-group")
+      label(for="category_id") Danh mục
+      select(
+        class="form-control"
+        id="category_id"
+        name="category_id"
+      )
+        option(value="") -- Chọn danh mục --
+        each item in listCategory
+          option(
+            value=item.id
+            selected=(item.id == product.category_id ? true : false)
+          ) #{item.title}
+
     div(class="form-group")
       label(for="desc") Mô tả
       textarea(

@@ -206,6 +206,9 @@ module.exports.createPost = async(req, res) => {
 module.exports.edit = async (req, res) => {
   const id = req.params.id;
 
+  const listCategory = await ProductCategory.find({
+    deleted: false
+  });
   const product = await Product.findOne({
     _id: id,
     deleted: false
@@ -213,7 +216,8 @@ module.exports.edit = async (req, res) => {
 
   res.render("admin/pages/products/edit", {
     pageTitle: "Chỉnh sửa sản phẩm",
-    product: product
+    product: product,
+    listCategory: listCategory
   });
 }
 
