@@ -61,7 +61,8 @@ module.exports.index = async (req, res) => {
     pageTitle: "Danh sách sản phẩm",
     products: products,
     totalPage: totalPage,// trả ra ngoài giao diện
-    currentPage: page
+    currentPage: page,
+    limitItems: limitItems
   });
 }
 
