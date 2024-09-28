@@ -1,4 +1,4 @@
-const Product = require("../../models/product.models");
+const Product = require("../../models/product.model");
 const ProductCategory = require("../../models/product-category.model")
 const systemConfig = require("../../config/system");
 module.exports.index = async (req, res) => {
