@@ -22,6 +22,7 @@ module.exports.createPost = async(req, res) => {
     const role = new Role(req.body);
     await role.save();
 
+    req.flash("success", "Thêm mới thành công");
     res.redirect(`/${systemConfig.prefixAdmin}/roles`);
 }
 
@@ -50,4 +51,30 @@ module.exports.editPatch = async(req, res) => {
       console.log(req.body);
       req.flash("success", "Cập nhật thành công!");
       res.redirect(`back`);
+}
+
+module.exports.permissions = async(req, res) => {
+    const records = await Role.find({
+        deleted: false
+    });
+    res.render("admin/pages/role/permissions", {
+        pageTitle: "Phân quyền",
+        records: records
+    });
+}
+
+module.exports.permissionsPatch = async(req, res) => {
+    for(const item of req.body) {
+        await Role.updateOne({        
+            _id: item.id,
+            deleted: false
+        }, {
+            permissions: item.permissions
+        });
+    }
+
+    req.flash("success", "Cập nhật thành công !");
+    res.json({
+        code: "success"
+    });
 }
