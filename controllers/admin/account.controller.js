@@ -75,7 +75,7 @@ module.exports.changePassword = async (req, res) => {
     _id: req.params.id,
     deleted: false
   });
-  res.render("admin/pages/accounts/change-password", {
+  res.render("admin/pages/account/change-password", {
     pageTitle: "Đổi mật khẩu",
     account: account
   });
