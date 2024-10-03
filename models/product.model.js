@@ -16,6 +16,8 @@ const productSchema = new mongoose.Schema({
   stock: Number,
   createdBy: String,
   createdAt: Date,
+  updatedBy: String,
+  updatedAt: Date,
   thumbnail: String,
   status: String,
   position: Number,

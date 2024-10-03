@@ -75,6 +75,23 @@ module.exports.index = async (req, res) => {
 
     if(item.createdAt) {
       item.createdAtFormat = moment(item.createdAt).format("HH:mm - DD/MM/YY");
+    }   
+  }
+
+  for(const item of products) {
+    const inforUpdated = await Account.findOne({
+      _id : item.updatedBy
+    });
+
+    if(inforUpdated) {
+      item.updatedByFullName = inforUpdated.fullName;
+    }
+    else {
+      item.updatedByFullName = "";
+    }
+
+    if(item.updatedAt) {
+      item.updatedAtFormat = moment(item.updatedAt).format("HH:mm - DD/MM/YY");
     }
     
   }
@@ -93,7 +110,9 @@ module.exports.changeStatus = async (req, res) => {
     await Product.updateOne({
       _id: req.body.id
     }, {
-      status: req.body.status
+      status: req.body.status,
+      updatedBy :res.locals.user.id,
+      updatedAt : new Date()
     });
 
     req.flash('success', 'Đổi trạng thái thành công!');
@@ -121,7 +140,9 @@ module.exports.changeMulti = async (req, res) => {
         await Product.updateMany({
           _id: req.body.ids
         }, {
-          status: req.body.status
+          status: req.body.status,
+          updatedBy :res.locals.user.id,
+          updatedAt : new Date()
         });
         
         req.flash('success', 'Đổi trạng thái thành công!');
@@ -136,7 +157,9 @@ module.exports.changeMulti = async (req, res) => {
         await Product.updateMany({
           _id: req.body.ids
         }, {
-          status: req.body.status
+          status: req.body.status,
+          updatedBy :res.locals.user.id,
+          updatedAt : new Date()
         });
         
         req.flash('success', 'Đổi trạng thái thành công!');
@@ -149,7 +172,9 @@ module.exports.changeMulti = async (req, res) => {
         await Product.updateMany({
           _id: req.body.ids
         }, {
-          deleted: "true"
+          deleted: "true",
+          updatedBy :res.locals.user.id,
+          updatedAt : new Date()
         });
       
         req.flash('success', 'Xoá thành công!');
@@ -173,7 +198,9 @@ module.exports.delete = async (req, res) => {
     await Product.updateOne({
       _id: req.body.id
     },{
-      deleted: true
+      deleted: true,
+      updatedBy :res.locals.user.id,
+      updatedAt : new Date()
     }
     );
 
@@ -190,7 +217,9 @@ module.exports.changePosition = async (req, res) => {
     await Product.updateOne({
       _id: req.body.id
     },{
-      position: req.body.position
+      position: req.body.position,
+      updatedBy :res.locals.user.id,
+      updatedAt : new Date()
     });
 
     req.flash('success', 'Đổi vị trí thành công!');
@@ -266,6 +295,9 @@ module.exports.editPatch = async(req, res) => {
       req.body.position = parseInt(req.body.position);
     }
 
+    // ghi log thay doi
+    req.body.updatedBy = res.locals.user.id;
+    req.body.updatedAt = new Date();
     await Product.updateOne({
       _id: id,
       deleted: false
