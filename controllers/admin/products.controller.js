@@ -1,5 +1,8 @@
 const Product = require("../../models/product.model");
-const ProductCategory = require("../../models/product-category.model")
+const ProductCategory = require("../../models/product-category.model");
+const Account = require("../../models/account.model");
+
+const moment = require("moment");
 const systemConfig = require("../../config/system");
 module.exports.index = async (req, res) => {
   const find = {
@@ -53,10 +56,28 @@ module.exports.index = async (req, res) => {
     sort["position"] = "asc";
   }
   const products = await Product
-  .find(find)
-  .limit(limitItems)
-  .skip(skip)
-  .sort(sort);
+    .find(find)
+    .limit(limitItems)
+    .skip(skip)
+    .sort(sort);
+  
+  for(const item of products) {
+    const inforCreated = await Account.findOne({
+      _id : item.createdBy
+    });
+
+    if(inforCreated) {
+      item.createdByFullName = inforCreated.fullName;
+    }
+    else {
+      item.createdByFullName = "";
+    }
+
+    if(item.createdAt) {
+      item.createdAtFormat = moment(item.createdAt).format("HH:mm - DD/MM/YY");
+    }
+    
+  }
 
   res.render("admin/pages/products/index", {
     pageTitle: "Danh sách sản phẩm",
@@ -204,7 +225,9 @@ module.exports.createPost = async(req, res) => {
       req.body.position = count + 1;
     }
   
-    
+    req.body.createdBy = res.locals.user.id;
+    req.body.createdAt = new Date();
+   
     const record = new Product(req.body);
   
     await record.save(); // đợi đến khi thêm bản ghi xong
@@ -269,3 +292,4 @@ module.exports.detail = async (req, res) => {
     });
   }
 }
+
