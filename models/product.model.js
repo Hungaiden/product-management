@@ -24,7 +24,9 @@ const productSchema = new mongoose.Schema({
   deleted: {
     type: Boolean,
     default: false
-  }
+  },
+  deletedBy: String,
+  deletedAt: Date,
 });
 
 const Product = mongoose.model('Product', productSchema, 'products');

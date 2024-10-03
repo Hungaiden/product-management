@@ -173,8 +173,8 @@ module.exports.changeMulti = async (req, res) => {
           _id: req.body.ids
         }, {
           deleted: "true",
-          updatedBy :res.locals.user.id,
-          updatedAt : new Date()
+          deleteddBy :res.locals.user.id,
+          deleteddAt : new Date()
         });
       
         req.flash('success', 'Xoá thành công!');
@@ -199,8 +199,8 @@ module.exports.delete = async (req, res) => {
       _id: req.body.id
     },{
       deleted: true,
-      updatedBy :res.locals.user.id,
-      updatedAt : new Date()
+      deleteddBy :res.locals.user.id,
+      deleteddAt : new Date()
     }
     );
 
