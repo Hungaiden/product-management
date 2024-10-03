@@ -24,15 +24,17 @@ module.exports.create = async (req, res) => {
   });
 }
 module.exports.createPost = async (req, res) => {
-  if(req.body.position) {
-    req.body.position = parseInt(req.body.position);
-  } else {
-    const countRecord = await ProductCategory.countDocuments();
-    req.body.position = countRecord + 1;
+  if(res.locals.role.permissions.includes("product-category_create")) {
+    if(req.body.position) {
+      req.body.position = parseInt(req.body.position);
+    } else {
+      const countRecord = await ProductCategory.countDocuments();
+      req.body.position = countRecord + 1;
+    }
+    const record = new ProductCategory(req.body);
+    await record.save();
+    res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
   }
-  const record = new ProductCategory(req.body);
-  await record.save();
-  res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
 }
 
 module.exports.edit = async (req, res) => {
@@ -57,18 +59,20 @@ module.exports.edit = async (req, res) => {
 }
 
 module.exports.editPatch = async(req, res) => {
-  const id = req.params.id;
+  if(res.locals.role.permissions.includes("product-category_edit")) {
+    const id = req.params.id;
 
-  if(req.body.position) {
-    req.body.position = parseInt(req.body.position);
-  } else {
-    delete req.body.position;
+    if(req.body.position) {
+      req.body.position = parseInt(req.body.position);
+    } else {
+      delete req.body.position;
+    }
+    await ProductCategory.updateOne({
+      _id: id,
+      deleted: false
+    }, req.body);
+
+    req.flash("success", "Thay đổi thành công");
+    res.redirect("back");
   }
-  await ProductCategory.updateOne({
-    _id: id,
-    deleted: false
-  }, req.body);
-
-  req.flash("success", "Thay đổi thành công");
-  res.redirect("back");
 }

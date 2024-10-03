@@ -68,17 +68,19 @@ module.exports.index = async (req, res) => {
 }
 
 module.exports.changeStatus = async (req, res) => {
-  await Product.updateOne({
-    _id: req.body.id
-  }, {
-    status: req.body.status
-  });
+  if(res.locals.role.permissions.includes("products_edit")) {
+    await Product.updateOne({
+      _id: req.body.id
+    }, {
+      status: req.body.status
+    });
 
-  req.flash('success', 'Đổi trạng thái thành công!');
+    req.flash('success', 'Đổi trạng thái thành công!');
 
-  res.json({
-    code: "success"
-  });
+    res.json({
+      code: "success"
+    });
+  }
 }
 
 module.exports.changeMulti = async (req, res) => {
@@ -92,84 +94,90 @@ module.exports.changeMulti = async (req, res) => {
   //   code: "success",
   //   message: "Đổi trạng thái thành công!"
   // });
-  switch (req.body.status) {
-    case "active":
-      await Product.updateMany({
-        _id: req.body.ids
-      }, {
-        status: req.body.status
-      });
+  if(res.locals.role.permissions.includes("products_edit")) {
+    switch (req.body.status) {
+      case "active":
+        await Product.updateMany({
+          _id: req.body.ids
+        }, {
+          status: req.body.status
+        });
+        
+        req.flash('success', 'Đổi trạng thái thành công!');
+
+        res.json({
+          code: "success"
+        });
+        break;
       
-      req.flash('success', 'Đổi trạng thái thành công!');
 
-      res.json({
-        code: "success"
-      });
-      break;
-    
+      case "inactive":
+        await Product.updateMany({
+          _id: req.body.ids
+        }, {
+          status: req.body.status
+        });
+        
+        req.flash('success', 'Đổi trạng thái thành công!');
 
-    case "inactive":
-      await Product.updateMany({
-        _id: req.body.ids
-      }, {
-        status: req.body.status
-      });
+        res.json({
+          code: "success"
+        });
+        break;
+      case "delete":
+        await Product.updateMany({
+          _id: req.body.ids
+        }, {
+          deleted: "true"
+        });
       
-      req.flash('success', 'Đổi trạng thái thành công!');
-
-      res.json({
-        code: "success"
-      });
-      break;
-    case "delete":
-      await Product.updateMany({
-        _id: req.body.ids
-      }, {
-        deleted: "true"
-      });
-    
-      req.flash('success', 'Xoá thành công!');
-      res.json({
-        code: "success"
-      });
-      break;
-    default:
-      req.flash('success', 'Trạng thái không hợp lệ!');
-      res.json({
-        code: "error"
-      });
-      break;
+        req.flash('success', 'Xoá thành công!');
+        res.json({
+          code: "success"
+        });
+        break;
+      default:
+        req.flash('success', 'Trạng thái không hợp lệ!');
+        res.json({
+          code: "error"
+        });
+        break;
+    }
   }
 }
 
 
 module.exports.delete = async (req, res) => {
-  await Product.updateOne({
-    _id: req.body.id
-  },{
-    deleted: true
+  if(res.locals.role.permissions.includes("products_delete")) {
+    await Product.updateOne({
+      _id: req.body.id
+    },{
+      deleted: true
+    }
+    );
+
+    req.flash('success', 'Xoá thành công!');
+
+    res.json({
+      code: "success"
+    });
   }
-  );
-
-  req.flash('success', 'Xoá thành công!');
-
-  res.json({
-    code: "success"
-  });
 }
 
 module.exports.changePosition = async (req, res) => {
-  await Product.updateOne({
-    _id: req.body.id
-  },{
-    position: req.body.position
-  });
+  if(res.locals.role.permissions.includes("products_edit")) {
+    await Product.updateOne({
+      _id: req.body.id
+    },{
+      position: req.body.position
+    });
 
-  req.flash('success', 'Đổi vị trí thành công!');
+    req.flash('success', 'Đổi vị trí thành công!');
 
-  res.json({
-    code: "success"
-  })
+    res.json({
+      code: "success"
+    })
+  }
 }
 
 module.exports.create = async (req, res) => {
@@ -183,24 +191,26 @@ module.exports.create = async (req, res) => {
 }
 
 module.exports.createPost = async(req, res) => {
-  req.body.price = parseInt(req.body.price);
-  req.body.discountPercentage = parseInt(req.body.discountPercentage);
-  req.body.stock = parseInt(req.body.stock);
+  if(res.locals.role.permissions.includes("products_create")) {
+    req.body.price = parseInt(req.body.price);
+    req.body.discountPercentage = parseInt(req.body.discountPercentage);
+    req.body.stock = parseInt(req.body.stock);
+    
+    if(req.body.position) {
+      req.body.position = parseInt(req.body.position);
+    }
+    else {
+      const count = await Product.countDocuments();
+      req.body.position = count + 1;
+    }
   
-  if(req.body.position) {
-    req.body.position = parseInt(req.body.position);
-  }
-  else {
-    const count = await Product.countDocuments();
-    req.body.position = count + 1;
-  }
-
+    
+    const record = new Product(req.body);
   
-  const record = new Product(req.body);
-
-  await record.save(); // đợi đến khi thêm bản ghi xong
-
-  res.redirect(`/${systemConfig.prefixAdmin}/products`);
+    await record.save(); // đợi đến khi thêm bản ghi xong
+  
+    res.redirect(`/${systemConfig.prefixAdmin}/products`);
+  }
 }
 
 module.exports.edit = async (req, res) => {
@@ -222,36 +232,40 @@ module.exports.edit = async (req, res) => {
 }
 
 module.exports.editPatch = async(req, res) => {
-  const id = req.params.id;
+  if(res.locals.role.permissions.includes("products_edit")) {
+    const id = req.params.id;
 
-  req.body.price = parseInt(req.body.price);
-  req.body.discountPercentage = parseInt(req.body.discountPercentage);
-  req.body.stock = parseInt(req.body.stock);
-  
-  if(req.body.position) {
-    req.body.position = parseInt(req.body.position);
+    req.body.price = parseInt(req.body.price);
+    req.body.discountPercentage = parseInt(req.body.discountPercentage);
+    req.body.stock = parseInt(req.body.stock);
+    
+    if(req.body.position) {
+      req.body.position = parseInt(req.body.position);
+    }
+
+    await Product.updateOne({
+      _id: id,
+      deleted: false
+    }, req.body)
+
+    req.flash("success", "Cập nhật thành công !")
+    res.redirect("back");
   }
-
-  await Product.updateOne({
-    _id: id,
-    deleted: false
-  }, req.body)
-
-  req.flash("success", "Cập nhật thành công !")
-  res.redirect("back");
 }
 
 
 module.exports.detail = async (req, res) => {
-  const id = req.params.id;
+  if(res.locals.role.permissions.includes("products_view")) {
+    const id = req.params.id;
 
-  const product = await Product.findOne({
-    _id: id,
-    deleted: false
-  });
+    const product = await Product.findOne({
+      _id: id,
+      deleted: false
+    });
 
-  res.render("admin/pages/products/detail", {
-    pageTitle: "Chi tiết sản phẩm",
-    product: product
-  });
+    res.render("admin/pages/products/detail", {
+      pageTitle: "Chi tiết sản phẩm",
+      product: product
+    });
+  }
 }
