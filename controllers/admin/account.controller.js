@@ -90,3 +90,32 @@ module.exports.changePasswordPatch = async (req, res) => {
   req.flash("success", "Cập nhật mật khẩu thành công!");
   res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
 }
+
+module.exports.myProfile = async (req, res) => {
+  res.render("admin/pages/account/my-profile", {
+    pageTitle: "Trang thông tin cá nhân",
+  });
+}
+
+module.exports.editProfile = async(req, res) => {
+  const roles = await Role.find({
+    deleted: false
+  });
+  res.render("admin/pages/account/edit-profile", {
+    pageTitle: "Chỉnh sửa tài khoản",
+    roles: roles
+  })
+}
+
+module.exports.editProfilePatch = async(req, res) => {
+  await Account.updateOne({
+    _id: res.locals.user.id,
+    deleted: false
+  }, req.body);
+
+  req.flash("success", "Thay đổi thành công");
+  res.redirect("back");
+}
+
+
+

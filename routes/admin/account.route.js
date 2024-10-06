@@ -29,4 +29,15 @@ router.patch(
 router.get("/change-password/:id", controller.changePassword);
 
 router.patch("/change-password/:id", controller.changePasswordPatch);
+
+router.get("/my-profile", controller.myProfile);
+
+router.get("/my-profile/edit", controller.editProfile);
+
+router.patch(
+    "/my-profile/edit", 
+    upload.single('avatar'),
+    uploadCloud.uploadSingle,
+    controller.editProfilePatch);
+
 module.exports = router;
