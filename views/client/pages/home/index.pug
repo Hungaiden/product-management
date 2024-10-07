@@ -1,4 +1,27 @@
 extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/products-item.pug
 
 block main
-    h1 Trang chủ
+    .container.my-3
+        +box-head("Danh sách sản phẩm nổi bật")
+
+        .row
+            each item in productFeatured
+                +product-item(item)
+
+    .container.my-3
+        +box-head("Danh sách sản phẩm mới")
+
+        .row
+            each item in productNew
+                +product-item(item)
+
+    .container.my-3
+        +box-head("Danh sách sản phẩm giảm giá")
+
+        .row
+            each item in productDiscount
+                +product-item(item)
+    
+

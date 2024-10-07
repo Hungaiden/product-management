@@ -61,6 +61,7 @@ module.exports.index = async (req, res) => {
     .skip(skip)
     .sort(sort);
   
+    // Them log lich su thay doi san pham
   for(const item of products) {
     const inforCreated = await Account.findOne({
       _id : item.createdBy
@@ -92,10 +93,10 @@ module.exports.index = async (req, res) => {
 
     if(item.updatedAt) {
       item.updatedAtFormat = moment(item.updatedAt).format("HH:mm - DD/MM/YY");
-    }
-    
+    }  
   }
-
+  // het them log thay doi lich su san pham
+  
   res.render("admin/pages/products/index", {
     pageTitle: "Danh sách sản phẩm",
     products: products,
