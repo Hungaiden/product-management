@@ -31,6 +31,14 @@ module.exports.detail = async (req, res) => {
       deleted: false
     });
 
+  if(product.category_id) {
+    const category = await ProductCategory.findOne({
+      _id: product.category_id,
+      deleted: false,
+      status: "active"
+    });
+    product.category = category;
+  }
   
   product.priceNew = product.price *(100 - product.discountPercentage)/100;
   product.priceNew = (product.priceNew).toFixed(0);
