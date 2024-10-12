@@ -24,17 +24,17 @@ module.exports.create = async (req, res) => {
   });
 }
 module.exports.createPost = async (req, res) => {
-  if(res.locals.role.permissions.includes("product-category_create")) {
+  
     if(req.body.position) {
       req.body.position = parseInt(req.body.position);
     } else {
       const countRecord = await ProductCategory.countDocuments();
       req.body.position = countRecord + 1;
     }
-    const record = new ProductCategory(req.body);
+    const record = new ProductCategory(req.body); 
     await record.save();
     res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
-  }
+  
 }
 
 module.exports.edit = async (req, res) => {
