@@ -85,12 +85,15 @@ module.exports.updatePatch = async (req, res) => {
   });
   const products = cart.products;
   const productUpdate = products.find(item => item.productId == product.productId);
+
   productUpdate.quantity = parseInt(product.quantity);
+
   await Cart.updateOne({
     _id: cartId
   }, {
     products: products
   });
+  
   res.json({
     code: "success",
     message: "Cập nhật thành công!"
