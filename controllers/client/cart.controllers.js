@@ -24,6 +24,8 @@ module.exports.addPost = async(req, res) => {
     }, {
         products: products
     });
+
+    req.flash('success', 'Thêm sản phẩm vào giỏ hàng thành công!');
     res.redirect("back");
 
     
