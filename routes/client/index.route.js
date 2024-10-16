@@ -2,6 +2,7 @@ const productRoute = require("./products.route"); // nhung file vao
 const homeRouter = require("./home.route");
 const cartRoute = require("./cart.route");
 const orderRoute = require("./order.route");
+const userRoute = require("./user.route");
 
 const categoryMiddleware = require("../../middlewares/client/category.middleware");
 
@@ -18,4 +19,6 @@ module.exports.index = (app) => { // xay dung ham route
     app.use("/cart", cartRoute);
 
     app.use("/order", orderRoute);
+
+    app.use("/user", userRoute);
 }
