@@ -35,6 +35,11 @@ header.header
               +sub-category(allCategory)
             li
               a(href="/cart") Giỏ hàng (#{miniCart})
+            if(user)
+              li
+                a(href="/user/profile") #{user.fullName}
+              li
+                a(href="/user/logout") Đăng xuất
             li
               a(href="/user/login") Đăng nhập
             li
