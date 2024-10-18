@@ -28,5 +28,9 @@ module.exports.index = (app) => { // xay dung ham route
 
     app.use("/user", userRoute);
 
-    app.use("/chat", chatRoute);
+    app.use(
+        "/chat", 
+        userMiddleware.requireAuth,
+        chatRoute
+    );
 }

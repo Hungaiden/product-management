@@ -29,7 +29,11 @@ app.use(express.static(`${__dirname}/public`)); // Thiết lập thư mục ch�
 // override with POST having ?_method=DELETE
 app.use(methodOverride('_method'));
 
+// khai bao bien toan cuc cho file pug
 app.locals.prefixAdmin = "admin";
+
+// khai bao bien toan cuc cho file js trong backend
+global._io = io;
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -47,10 +51,6 @@ app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce
 
 routeAdmin.index(app);
 routeClient.index(app); 
-
-io.on("connection", (socket) => {
-  console.log("Có 1 user kết nối!", socket.id);
-});
 
 
 server.listen(port, () => {
