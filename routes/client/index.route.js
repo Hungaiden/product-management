@@ -3,6 +3,7 @@ const homeRouter = require("./home.route");
 const cartRoute = require("./cart.route");
 const orderRoute = require("./order.route");
 const userRoute = require("./user.route");
+const chatRoute = require("./chat.route");
 
 const categoryMiddleware = require("../../middlewares/client/category.middleware");
 
@@ -26,4 +27,6 @@ module.exports.index = (app) => { // xay dung ham route
     app.use("/order", orderRoute);
 
     app.use("/user", userRoute);
+
+    app.use("/chat", chatRoute);
 }

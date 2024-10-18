@@ -5,10 +5,15 @@ const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const methodOverride = require('method-override')
+const http = require('http');
+const { Server } = require("socket.io");
 
 const app = express();
 require('dotenv').config();
 const port = process.env.PORT;
+
+const server = http.createServer(app);
+const io = new Server(server);
 
 const database = require("./config/database");
 database.connect();
@@ -43,6 +48,11 @@ app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce
 routeAdmin.index(app);
 routeClient.index(app); 
 
-app.listen(port, () => {
+io.on("connection", (socket) => {
+  console.log("Có 1 user kết nối!", socket.id);
+});
+
+
+server.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
