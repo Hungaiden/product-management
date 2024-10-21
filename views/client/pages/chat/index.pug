@@ -9,24 +9,19 @@ block main
       .col-12
         .chat
           .inner-body
-            .inner-incoming
-              .inner-name Em Yêu
-              .inner-content
-                | A ơi sang nhà e nha, nhà e không có ai ở nhà cả
-            .inner-outgoing
-              .inner-content
-                | Thế à? Ok e iu
-            .inner-incoming
-              .inner-name Em Yêu
-              .inner-content
-                | Nhanh nha nhanh nha
-            .inner-outgoing
-              .inner-content
-                | Ck đến rồi mà thấy ai ở nhà đâu e? Khóa cửa mà :(
-            .inner-incoming
-              .inner-name Em Yêu
-              .inner-content
-                | Thì em bảo nhà e không ai ở nhà mà :))
+             each chat in chats
+              div(
+                class=(
+                  user.id != chat.userId ?
+                  "inner-incoming"
+                  :
+                  "inner-outgoing"
+                )
+              )
+                if(user.id != chat.userId)
+                  .inner-name #{chat.fullName}
+                .inner-content
+                  | #{chat.content}
           .inner-foot
             form(
               class="inner-form"
