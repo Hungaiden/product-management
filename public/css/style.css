@@ -248,3 +248,13 @@
   cursor: pointer;
 }
 /* End chat */
+
+/* .tooltip */
+.tooltip {
+  z-index: -1;
+}
+.tooltip.shown {
+  opacity: 1;
+  z-index: 1070;
+}
+/* End .tooltip */
