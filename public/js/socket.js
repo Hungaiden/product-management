@@ -38,8 +38,11 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
     ${htmlFullName}
     <div class = "inner-content">${data.content}</div>
   `
+  const elementListTyping = document.querySelector(".chat .inner-list-typing");
+  
+  body.insertBefore(div, elementListTyping);
 
-  body.appendChild(div);
+  socket.emit("CLIENT_SEND_TYPING", false);
 
   bodyChat.scrollTop = bodyChat.scrollHeight;
 });
@@ -62,7 +65,7 @@ if(emojiPicker) {
 
   Popper.createPopper(buttonIcon, tooltip);
 
-  console.log(buttonIcon);
+  
   buttonIcon.addEventListener("click", () => {
     tooltip.classList.toggle('shown');
   });
@@ -73,5 +76,55 @@ if(emojiPicker) {
       inputChat.value = inputChat.value + event.detail.unicode;
     });
   });
+
+  var timeOutTyping;
+  inputChat.addEventListener("keyup", () => {
+    socket.emit("CLIENT_SEND_TYPING", true);
+
+    clearTimeout(timeOutTyping);
+
+    timeOutTyping = setTimeout(() => {
+      socket.emit("CLIENT_SEND_TYPING", false);
+    }, 3000);
+  })
 }
 // end show icon  
+
+
+//SEVER_RETURN_TYPING
+const elementListTyping = document.querySelector(".chat .inner-list-typing");
+
+if(elementListTyping) {
+  socket.on("SEVER_RETURN_TYPING", (data) => {
+    if(data.type) {
+      const existBoxTyping = elementListTyping.querySelector(`.box-typing[user-id="${data.userId}"]`);
+      if(!existBoxTyping) {
+        const boxTyping = document.createElement("div");
+        boxTyping.classList.add("box-typing");
+        boxTyping.setAttribute("user-id", data.userId);
+
+        boxTyping.innerHTML = `
+          <div class="inner-name">${data.fullName}</div>
+          <div class="inner-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        `;
+
+      elementListTyping.appendChild(boxTyping); 
+
+      bodyChat.scrollTop = bodyChat.scrollHeight; // scroll
+      }
+    }  
+    else {
+      const existBoxTyping = elementListTyping.querySelector(`.box-typing[user-id="${data.userId}"]`);
+      if(existBoxTyping) {
+        elementListTyping.removeChild(existBoxTyping);
+      }
+    }
+      
+  })
+}
+
+// ENd SEVER_RETURN_TYPING
