@@ -302,3 +302,23 @@
  }
 }
 /* End box-typing */
+
+.chat .inner-preview-images {
+  position: relative;
+}
+.chat .inner-preview-images .label-container {
+  display: none;
+}
+.chat .inner-preview-images .input-container {
+  display: none;
+}
+.chat .inner-preview-images .image-preview {
+  height: auto;
+  padding: 0;
+  border-radius: 0;
+}
+.chat .inner-preview-images .image-preview-item {
+  width: 90px;
+  background-size: contain;
+}
+/* End chat */
