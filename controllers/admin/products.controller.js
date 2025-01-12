@@ -4,6 +4,7 @@ const Account = require("../../models/account.model");
 
 const moment = require("moment");
 const systemConfig = require("../../config/system");
+
 module.exports.index = async (req, res) => {
   const find = {
     deleted : false
@@ -326,3 +327,62 @@ module.exports.detail = async (req, res) => {
   }
 }
 
+module.exports.trash = async (req, res) => {
+  if(res.locals.role.permissions.includes("products_edit")) {
+    const find = {
+      deleted : true
+    }
+
+      // Phân trang
+    let limitItems = 4;
+    let page = 1;
+
+    if (req.query.limit) {
+        limitItems = parseInt(req.query.limit);
+    }
+
+    if (req.query.page) {
+        page = parseInt(req.query.page);
+    }
+    const skip = (page - 1) * limitItems;
+
+    // Tính tổng số trang và đếm sản phẩm có deleted = true
+    const totalProduct = await Product.countDocuments(find);
+    const totalPage = Math.ceil(totalProduct / limitItems);
+
+    // Nếu cần lấy danh sách sản phẩm theo điều kiện và phân trang
+    const products = await Product.find(find).skip(skip).limit(limitItems);
+
+    res.render("admin/pages/products/trash", {
+      pageTitle: "Thùng rác",
+      trashProducts: products,
+      totalPage: totalPage,// trả ra ngoài giao diện
+      currentPage: page,
+      limitItems: limitItems
+    });
+
+  }
+}
+
+module.exports.restore = async (req, res) => {
+  await Product.updateOne({
+    _id: req.body.id
+  }, {
+    deleted: false
+  });
+
+  res.json({
+    code: "success",
+    message: "Khôi phục thành công!"
+  });
+}
+
+module.exports.deletePermanently = async (req, res) => {
+  await Product.deleteOne({
+    _id: req.body.id
+  });
+  res.json({
+    code: "success",
+    message: "Xoá sản phẩm thành công!"
+  });
+}

@@ -1,6 +1,7 @@
-const express = require("express");
-var path = require('path');
+const express = require("express"); // nhung express
+const app = express();
 
+var path = require('path');
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
@@ -10,20 +11,21 @@ const methodOverride = require('method-override')
 const http = require('http');
 const { Server } = require("socket.io");
 
-const app = express();
-require('dotenv').config();
+
+
+require('dotenv').config();   // cai file env de luu thong tin bao mat
 const port = process.env.PORT;
 
 const server = http.createServer(app);
 const io = new Server(server);
 
-const database = require("./config/database");
-database.connect();
+const database = require("./config/database"); // ket noi database
+database.connect();                            // ket noi database
 
-const routeAdmin = require("./routes/admin/index.route");
-const routeClient = require("./routes/client/index.route");
+const routeAdmin = require("./routes/admin/index.route"); // chia file route
+const routeClient = require("./routes/client/index.route"); 
 
-app.set('views', `${__dirname}/views`);
+app.set('views', `${__dirname}/views`);   // cai template engine
 app.set('view engine', 'pug');
 
 app.use(express.static(`${__dirname}/public`)); // Thiết lập thư mục chứa file tĩnh

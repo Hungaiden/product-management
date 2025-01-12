@@ -5,6 +5,7 @@ module.exports.index = async (req, res) => {
   _io.once("connection", (socket) => {
     // Người dùng gửi tin nhắn lên server
     socket.on("CLIENT_SEND_MESSAGE", async (data) => {
+      // console.log(data.images);
       const dataChat = {
         userId: res.locals.user.id,
         // roomChatId: String,

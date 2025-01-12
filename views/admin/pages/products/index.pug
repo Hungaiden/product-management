@@ -65,6 +65,13 @@ block main
                 class = "btn btn-outline-success"
                 ) + Thêm mới
 
+            // Biểu tượng thùng rác
+            if(role.permissions.includes("products_edit"))
+              a(
+                href=`/${prefixAdmin}/products/trash`
+                class="btn btn-outline-danger ml-2"
+              )
+                i(class="fas fa-trash-alt") Thùng rác
           table.table.table-hover.table-sm
             thead
               tr

@@ -14,9 +14,9 @@ const systemConfig = require("../../config/system");
 
 const authMiddleware = require("../../middlewares/admin/auth.middleware");
 
-module.exports.index = (app) => {
+module.exports.index = (app) => {  
   const PATH_ADMIN = `/admin`
-  app.use(
+  app.use(      // dung app.use vi trong router con dung nhieu phuong thuc khac nhau
     `${PATH_ADMIN}/dashboard`,
     authMiddleware.requireAuth, 
      dashboardRoute);

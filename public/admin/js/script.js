@@ -71,7 +71,7 @@ if(listButtonPagination.length > 0) { // nếu k tìm thấy nó trả ra mảng
         })
     })
     // Hiển thị trạng thái active
-    const pageCurrent = url.searchParams.get("page");
+    const pageCurrent = url.searchParams.get("page") || 1;
     const buttonCurrent = document.querySelector(`[button-pagination="${pageCurrent}"]`);
     if(buttonCurrent) {
         buttonCurrent.parentNode.classList.add("active");
@@ -193,6 +193,71 @@ if(listButtonDelete.length > 0) {
 }
 // Hết xoá bản ghi
 
+
+//Khoi phuc ban ghi
+const listButtonRestore = document.querySelectorAll("[button-restore]");
+if(listButtonRestore.length > 0) {
+  listButtonRestore.forEach(button => {
+    button.addEventListener("click", () => {
+      const isConfirm = confirm("Bạn có chắc muốn khôi phục bản ghi này?");
+
+      if(isConfirm) {
+        const id = button.getAttribute("item-id");
+        const path = button.getAttribute("data-path");
+
+        fetch(path, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "PATCH",
+          body: JSON.stringify({
+            id: id
+          })
+        })
+          .then(res => res.json())
+          .then(data => {
+            if(data.code == "success") {
+              location.reload();
+            }
+          })
+      }
+    })
+  })
+}
+// Het khoi phuc ban ghi
+
+
+// Xoá vĩnh viễn bản ghi
+const listButtonDeletePermanently = document.querySelectorAll("[button-delete-permanently]");
+if(listButtonDeletePermanently.length > 0) {
+  listButtonDeletePermanently.forEach(button => {
+    button.addEventListener("click", () => {
+      const isConfirm = confirm("Bạn có chắc muốn xoá vĩnh viễn bản ghi này?");
+
+      if(isConfirm) {
+        const id = button.getAttribute("item-id");
+        const path = button.getAttribute("data-path");
+
+        fetch(path, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "DELETE",
+          body: JSON.stringify({
+            id: id
+          })
+        })
+          .then(res => res.json())
+          .then(data => {
+            if(data.code == "success") {
+              location.reload();
+            }
+          })
+      }
+    })
+  })
+}
+// Hết xoá vĩnh viễn bản ghi
 
 // Đổi vị trí
 const listInputPosition = document.querySelectorAll("[input-position]");
