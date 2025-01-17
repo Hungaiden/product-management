@@ -18,6 +18,17 @@ block main
         each item in records
           th(class="text-center" role-id=item.id) #{item.title}
     tbody
+      //- Tổng quan
+      tr
+        td(colspan="4")
+          b Tổng quan
+      tr(data-name="dashboard_view")
+        td Xem
+        each item in records
+          td(class="text-center")
+            input(type="checkbox" data-id=item.id)
+      //- Hết Tổng quan
+      
       //- Danh mục sản phẩm
       tr
         td(colspan="4")

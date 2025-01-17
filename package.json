@@ -24,6 +24,7 @@
     "mongoose-slug-updater": "^3.3.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.15",
+    "numeral": "^2.0.6",
     "pug": "^3.0.3",
     "socket.io": "^4.8.0",
     "streamifier": "^0.1.1",

@@ -19,10 +19,12 @@ module.exports.create = async(req, res) => {
 }
 
 module.exports.createPost = async(req, res) => {
-    const role = new Role(req.body);
-    await role.save();
+    if(res.locals.role.permissions.includes("roles_create")){
+        const role = new Role(req.body);
+        await role.save();
 
-    req.flash("success", "Thêm mới thành công");
+        req.flash("success", "Thêm mới thành công");
+    }
     res.redirect(`/${systemConfig.prefixAdmin}/roles`);
 }
 
@@ -41,16 +43,18 @@ module.exports.edit = async(req, res) => {
 }
 
 module.exports.editPatch = async(req, res) => {
-    const id = req.params.id;
+    if(res.locals.role.permissions.includes("roles_edit")){
+        const id = req.params.id;
 
-    await Role.updateOne({
-        _id: id,
-        deleted: false
-      }, req.body);
+        await Role.updateOne({
+            _id: id,
+            deleted: false
+        }, req.body);
 
-      console.log(req.body);
-      req.flash("success", "Cập nhật thành công!");
-      res.redirect(`back`);
+        console.log(req.body);
+        req.flash("success", "Cập nhật thành công!");
+    }
+    res.redirect(`back`);
 }
 
 module.exports.permissions = async(req, res) => {
@@ -64,17 +68,20 @@ module.exports.permissions = async(req, res) => {
 }
 
 module.exports.permissionsPatch = async(req, res) => {
-    for(const item of req.body) {
-        await Role.updateOne({        
-            _id: item.id,
-            deleted: false
-        }, {
-            permissions: item.permissions
+    if(res.locals.role.permissions.includes("roles_permissions")){
+        for(const item of req.body) {
+            await Role.updateOne({        
+                _id: item.id,
+                deleted: false
+            }, {
+                permissions: item.permissions
+            });
+        }
+
+        req.flash("success", "Cập nhật thành công !");
+        res.json({
+            code: "success"
         });
     }
-
-    req.flash("success", "Cập nhật thành công !");
-    res.json({
-        code: "success"
-    });
+    
 }

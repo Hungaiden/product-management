@@ -1,6 +1,7 @@
 const Product = require("../../models/product.model");
 const ProductCategory = require("../../models/product-category.model");
 const Account = require("../../models/account.model");
+const numeral = require('numeral');
 
 const moment = require("moment");
 const systemConfig = require("../../config/system");
@@ -78,6 +79,11 @@ module.exports.index = async (req, res) => {
     if(item.createdAt) {
       item.createdAtFormat = moment(item.createdAt).format("HH:mm - DD/MM/YY");
     }   
+
+    // // Định dạng giá với dấu 
+    // const price = Number(item.price);
+    // item.price = numeral(item.price).format('0.0');
+
   }
 
   for(const item of products) {
@@ -147,7 +153,7 @@ module.exports.changeMulti = async (req, res) => {
           updatedAt : new Date()
         });
         
-        req.flash('success', 'Đổi trạng thái thành công!');
+        req.flash('success', `Đổi trạng thái thành công ${req.body.ids.length} sản phẩm!`);
 
         res.json({
           code: "success"
@@ -164,7 +170,7 @@ module.exports.changeMulti = async (req, res) => {
           updatedAt : new Date()
         });
         
-        req.flash('success', 'Đổi trạng thái thành công!');
+        req.flash('success', `Đổi trạng thái thành công ${req.body.ids.length} sản phẩm!`);
 
         res.json({
           code: "success"
@@ -179,7 +185,7 @@ module.exports.changeMulti = async (req, res) => {
           deleteddAt : new Date()
         });
       
-        req.flash('success', 'Xoá thành công!');
+        req.flash('success', `Xoá thành công ${req.body.ids.length} sản phẩm!`);
         res.json({
           code: "success"
         });
@@ -233,13 +239,15 @@ module.exports.changePosition = async (req, res) => {
 }
 
 module.exports.create = async (req, res) => {
-  const listCategory = await ProductCategory.find({
-    deleted: false
-  });
-  res.render("admin/pages/products/create", {
-    pageTitle: "Thêm mới sản phẩm",
-    listCategory: listCategory
-  });
+  if(res.locals.role.permissions.includes("products_create")) {
+    const listCategory = await ProductCategory.find({
+      deleted: false
+    });
+    res.render("admin/pages/products/create", {
+      pageTitle: "Thêm mới sản phẩm",
+      listCategory: listCategory
+    });
+  }
 }
 
 module.exports.createPost = async(req, res) => {
@@ -258,31 +266,35 @@ module.exports.createPost = async(req, res) => {
   
     req.body.createdBy = res.locals.user.id;
     req.body.createdAt = new Date();
-   
+    
+    
     const record = new Product(req.body);
   
     await record.save(); // đợi đến khi thêm bản ghi xong
   
-    res.redirect(`/${systemConfig.prefixAdmin}/products`);
   }
+  res.redirect(`/${systemConfig.prefixAdmin}/products`);
+
 }
 
 module.exports.edit = async (req, res) => {
-  const id = req.params.id;
+  if(res.locals.role.permissions.includes("products_edit")) {
+    const id = req.params.id;
 
-  const listCategory = await ProductCategory.find({
-    deleted: false
-  });
-  const product = await Product.findOne({
-    _id: id,
-    deleted: false
-  });
+    const listCategory = await ProductCategory.find({
+      deleted: false
+    });
+    const product = await Product.findOne({
+      _id: id,
+      deleted: false
+    });
 
-  res.render("admin/pages/products/edit", {
-    pageTitle: "Chỉnh sửa sản phẩm",
-    product: product,
-    listCategory: listCategory
-  });
+    res.render("admin/pages/products/edit", {
+      pageTitle: "Chỉnh sửa sản phẩm",
+      product: product,
+      listCategory: listCategory
+    });
+  }
 }
 
 module.exports.editPatch = async(req, res) => {
@@ -306,8 +318,9 @@ module.exports.editPatch = async(req, res) => {
     }, req.body)
 
     req.flash("success", "Cập nhật thành công !")
-    res.redirect("back");
+    
   }
+  res.redirect("back");
 }
 
 
@@ -328,7 +341,7 @@ module.exports.detail = async (req, res) => {
 }
 
 module.exports.trash = async (req, res) => {
-  if(res.locals.role.permissions.includes("products_edit")) {
+  if(res.locals.role.permissions.includes("products_view")) {
     const find = {
       deleted : true
     }
@@ -371,9 +384,9 @@ module.exports.restore = async (req, res) => {
     deleted: false
   });
 
+  req.flash('success', 'Khôi phục thành công!');
   res.json({
-    code: "success",
-    message: "Khôi phục thành công!"
+    code: "success"
   });
 }
 
@@ -381,8 +394,9 @@ module.exports.deletePermanently = async (req, res) => {
   await Product.deleteOne({
     _id: req.body.id
   });
+
+  req.flash('success', 'Xoá sản phẩm thành công!');
   res.json({
-    code: "success",
-    message: "Xoá sản phẩm thành công!"
+    code: "success"
   });
 }

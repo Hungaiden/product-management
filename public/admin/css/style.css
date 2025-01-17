@@ -70,3 +70,29 @@
   display: none;
 }
 /* End image-preview */
+
+
+
+/* Auth */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #6a11cb, #2575fc); /* Hiệu ứng gradient màu tím và xanh lam */
+  background-attachment: fixed;
+  color: #fff;
+}
+
+.auth-box {
+  background: rgba(255, 255, 255, 0.9); /* Nền trắng trong suốt */
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.auth-header h1 {
+  color: #343a40;
+}
+
+/* End Auth */

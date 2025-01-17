@@ -33,11 +33,12 @@ module.exports.create = async(req, res) => {
 }
 
 module.exports.createPost = async(req, res) => {
-  req.body.password = md5(req.body.password);
-  req.body.token = generateHelper.generateRandomString(30);
-  const account = new Account(req.body);
-  await account.save();
-  
+  if(res.locals.role.permissions.includes("accounts_create")){
+    req.body.password = md5(req.body.password);
+    req.body.token = generateHelper.generateRandomString(30);
+    const account = new Account(req.body);
+    await account.save();
+  }
   res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
 }
 
@@ -61,12 +62,14 @@ module.exports.edit = async (req, res) => {
 }
 
 module.exports.editPatch = async(req, res) => {
-  await Account.updateOne({
-    _id: req.params.id,
-    deleted: false
-  }, req.body);
+  if(res.locals.role.permissions.includes("accounts_edit")){
+    await Account.updateOne({
+      _id: req.params.id,
+      deleted: false
+    }, req.body);
 
-  req.flash("success", "Thay đổi thành công");
+    req.flash("success", "Thay đổi thành công");
+  }
   res.redirect("back");
 }
 
@@ -81,13 +84,27 @@ module.exports.changePassword = async (req, res) => {
   });
 }
 module.exports.changePasswordPatch = async (req, res) => {
-  await Account.updateOne({
-    _id: req.params.id,
-    deleted: false
-  }, {
-    password: md5(req.body.password)
-  });
-  req.flash("success", "Cập nhật mật khẩu thành công!");
+  if(res.locals.role.permissions.includes("accounts_edit")){
+    const user = await Account.findOne({
+      _id: req.params.id,
+      deleted: false 
+    });
+    if(md5(req.body.old_password) != user.password) {
+      req.flash("error", "Sai mật khẩu");
+      res.redirect("back");
+      
+    }
+  
+    else {
+      await Account.updateOne({
+        _id: req.params.id,
+        deleted: false
+      }, {
+        password: md5(req.body.new_password)
+      });
+      req.flash("success", "Cập nhật mật khẩu thành công!");
+    } 
+  };
   res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
 }
 
@@ -108,12 +125,15 @@ module.exports.editProfile = async(req, res) => {
 }
 
 module.exports.editProfilePatch = async(req, res) => {
-  await Account.updateOne({
-    _id: res.locals.user.id,
-    deleted: false
-  }, req.body);
-
-  req.flash("success", "Thay đổi thành công");
+  if(res.locals.role.permissions.includes("accounts_edit")){
+    await Account.updateOne({
+      _id: res.locals.user.id,
+      deleted: false
+    }, req.body);
+  
+    req.flash("success", "Thay đổi thành công");
+  }
+  
   res.redirect("back");
 }
 

@@ -1,8 +1,9 @@
 extends ../../layouts/auth.pug
+
 block main
   .container.my-5
     .row.justify-content-center
-      .col-6
+      .col-8.auth-box
         h1(class="text-center") Đăng nhập
         form(
           action=`/${prefixAdmin}/auth/login`
@@ -15,6 +16,7 @@ block main
               class="form-control"
               id="email"
               name="email"
+              placeholder="Nhập email của bạn"
               required
             )
           div(class="form-group")
@@ -24,6 +26,7 @@ block main
               class="form-control"
               id="password"
               name="password"
+              placeholder="Nhập mật khẩu của bạn"
               required
             )
           div(class="form-group")
@@ -31,3 +34,5 @@ block main
               type="submit"
               class="btn btn-primary btn-block"
             ) Đăng nhập
+          div(class="form-group text-center")
+            a(href=`/${prefixAdmin}/auth/forgot-password` class="text-muted") Quên mật khẩu?

@@ -1,6 +1,6 @@
 const Product = require("../../models/product.model");
 const ProductCategory = require("../../models/product-category.model");
-
+const numeral = require('numeral');
 module.exports.index = async (req, res) => {
   const products = await Product
     .find({
@@ -14,7 +14,13 @@ module.exports.index = async (req, res) => {
   for (const item of products) {
     item.priceNew = item.price*(100 - item.discountPercentage)/100;
     item.priceNew = (item.priceNew).toFixed(0);
+    item.price = (item.price).toFixed(0);
+    item.price = numeral(item.price).format('0,0');
+    item.priceNew = numeral(item.priceNew).format('0,0');
   }
+
+  
+
   res.render("client/pages/products/index", {
     pageTitle: "Danh sách sản phẩm",
     products: products  
@@ -42,7 +48,10 @@ module.exports.detail = async (req, res) => {
   
   product.priceNew = product.price *(100 - product.discountPercentage)/100;
   product.priceNew = (product.priceNew).toFixed(0);
-  
+  product.priceNew = numeral(product.priceNew).format('0,0'); 
+
+  product.price = (product.price).toFixed(0);
+  product.price = numeral(product.price).format('0,0'); 
 
   res.render("client/pages/products/detail", {
     pageTitle: product.title,

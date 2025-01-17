@@ -18,10 +18,14 @@ router.post(
 
 router.get("/edit/:id", controller.edit);
 
+router.get("/detail/:id", controller.detail);
+
 router.patch(
   "/edit/:id",
   upload.single('thumbnail'),
   uploadCloud.uploadSingle,
   controller.editPatch
 );
+
+router.patch("/delete/:id", controller.delete);
 module.exports = router;
