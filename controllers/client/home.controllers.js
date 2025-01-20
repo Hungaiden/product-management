@@ -11,10 +11,14 @@ module.exports.index =async(req, res) => {
     })
     .limit(6)
 
-    for(const item of productFeatured) {
+    for (const item of productFeatured) {
         item.newPrice = (1 - item.discountPercentage / 100) * item.price;
-        item.newPrice.toFixed(0);
+        item.newPrice = item.newPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Cách 1: Tự định dạng
+        // Hoặc dùng toLocaleString:
+        // item.newPriceFormatted = Math.round(item.newPrice).toLocaleString('vi-VN');
+        item.priceFormatted = item.price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
+    
 
     // Sản phẩm mới
     const productNew = await Product.find({
@@ -28,7 +32,10 @@ module.exports.index =async(req, res) => {
 
     for(const item of productNew) {
         item.newPrice = (1 - item.discountPercentage / 100) * item.price;
-        item.newPrice.toFixed(0);
+        item.newPrice = item.newPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Cách 1: Tự định dạng
+        // Hoặc dùng toLocaleString:
+        // item.newPriceFormatted = Math.round(item.newPrice).toLocaleString('vi-VN');
+        item.priceFormatted = item.price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
 
     // Sản phẩm giảm giá
@@ -37,13 +44,16 @@ module.exports.index =async(req, res) => {
         status: "active",
     })
     .sort({
-        position: "desc"
+        discountPercentage: "desc"
     })
     .limit(6)
 
     for(const item of productDiscount) {
         item.newPrice = (1 - item.discountPercentage / 100) * item.price;
-        item.newPrice.toFixed(0);
+        item.newPrice = item.newPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Cách 1: Tự định dạng
+        // Hoặc dùng toLocaleString:
+        // item.newPriceFormatted = Math.round(item.newPrice).toLocaleString('vi-VN');
+        item.priceFormatted = item.price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
 
     res.render("client/pages/home/index", {

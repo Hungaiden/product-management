@@ -9,11 +9,46 @@
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Logo */
 .header .inner-logo img {
-  max-height: 60px;
-  margin-left: 20px;
+  max-height: 60px; /* Giảm chiều cao logo */
+  margin-left: 10px; /* Điều chỉnh khoảng cách */
 }
 
+/* Search Form */
+.header form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Đảm bảo form chiếm toàn bộ không gian có sẵn */
+  max-width: 600px; /* Giới hạn chiều rộng tối đa của form */
+  margin: 0 auto; /* Căn giữa form */
+}
+
+.header form .form-control {
+  width: calc(100% - 80px); /* Tăng chiều rộng input, trừ đi chiều rộng nút */
+  border-radius: 20px 0 0 20px;
+  padding: 0.5rem 1rem; /* Điều chỉnh padding để cân đối hơn */
+  font-size: 16px; /* Tăng kích thước chữ */
+}
+
+.header form .btn {
+  border-radius: 0 20px 20px 0;
+  padding: 0.5rem 1.5rem; /* Điều chỉnh padding nút */
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px; /* Tăng kích thước chữ nút */
+  transition: all 0.3s ease;
+}
+
+.header form .btn:hover {
+  background-color: #0056b3;
+}
+/* End Search Form */
+
+
+
+/* Menu */
 .header .inner-menu > ul {
   list-style: none;
   padding: 0;
@@ -25,43 +60,26 @@
 }
 
 .header .inner-menu > ul > li {
-  margin-left: 20px;
+  margin-left: 15px; /* Giảm khoảng cách giữa các mục */
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
   font-weight: bold;
 }
 
-.header .inner-menu > ul > li > a {
-  text-decoration: none;
-  color: #343a40;
-  padding: 5px 10px;
-  border-radius: 5px;
-  transition: all 0.3s ease;
-}
-
-.header .inner-menu > ul > li > a:hover {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.header .inner-menu > ul > li.special > a {
-  background-color: #007bff;
-  color: #fff;
-  padding: 8px 15px;
-  border-radius: 20px;
-  font-size: 16px;
-  font-weight: bold;
-  transition: all 0.3s ease;
-}
-
-.header .inner-menu > ul > li.special > a:hover {
-  background-color: #0056b3;
-}
-
+/* Responsive Adjustments */
 @media (max-width: 768px) {
   .header {
     flex-direction: column;
     padding: 10px 0;
+  }
+
+  .header .inner-logo {
+    margin-bottom: 15px;
+  }
+
+  .header form {
+    width: 100%;
+    margin-bottom: 15px;
   }
 
   .header .inner-menu > ul {
@@ -73,9 +91,7 @@
     margin: 10px 0;
   }
 }
-
-  /* End Header */
-  
+/* End header */
 
 
   /* Footer */

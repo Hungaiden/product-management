@@ -63,7 +63,7 @@ module.exports.index = async (req, res) => {
     .skip(skip)
     .sort(sort);
   
-    // Them log lich su thay doi san pham
+    // Them log lich su tao san pham
   for(const item of products) {
     const inforCreated = await Account.findOne({
       _id : item.createdBy
@@ -80,12 +80,11 @@ module.exports.index = async (req, res) => {
       item.createdAtFormat = moment(item.createdAt).format("HH:mm - DD/MM/YY");
     }   
 
-    // // Định dạng giá với dấu 
-    // const price = Number(item.price);
-    // item.price = numeral(item.price).format('0.0');
+    
 
   }
-
+  
+  // log lich su thay doi san pham
   for(const item of products) {
     const inforUpdated = await Account.findOne({
       _id : item.updatedBy
@@ -104,6 +103,11 @@ module.exports.index = async (req, res) => {
   }
   // het them log thay doi lich su san pham
   
+  for(const item of products) {
+    item.newPrice = (1 - item.discountPercentage / 100) * item.price;
+    item.newPrice = item.newPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Cách 1: Tự định dạng      
+    item.priceFormatted = item.price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
   res.render("admin/pages/products/index", {
     pageTitle: "Danh sách sản phẩm",
     products: products,
@@ -122,9 +126,6 @@ module.exports.changeStatus = async (req, res) => {
       updatedBy :res.locals.user.id,
       updatedAt : new Date()
     });
-
-    req.flash('success', 'Đổi trạng thái thành công!');
-
     res.json({
       code: "success"
     });
@@ -181,8 +182,8 @@ module.exports.changeMulti = async (req, res) => {
           _id: req.body.ids
         }, {
           deleted: "true",
-          deleteddBy :res.locals.user.id,
-          deleteddAt : new Date()
+          deletedBy :res.locals.user.id,
+          deletedAt : new Date()
         });
       
         req.flash('success', `Xoá thành công ${req.body.ids.length} sản phẩm!`);
@@ -207,8 +208,8 @@ module.exports.delete = async (req, res) => {
       _id: req.body.id
     },{
       deleted: true,
-      deleteddBy :res.locals.user.id,
-      deleteddAt : new Date()
+      deletedBy :res.locals.user.id,
+      deletedAt : new Date()
     }
     );
 
@@ -289,6 +290,9 @@ module.exports.edit = async (req, res) => {
       deleted: false
     });
 
+    // hiển thị tiền định dạng chuẩn
+    product.priceFormatted = product.price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+   
     res.render("admin/pages/products/edit", {
       pageTitle: "Chỉnh sửa sản phẩm",
       product: product,
@@ -333,6 +337,7 @@ module.exports.detail = async (req, res) => {
       deleted: false
     });
 
+    product.priceFormatted = product.price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     res.render("admin/pages/products/detail", {
       pageTitle: "Chi tiết sản phẩm",
       product: product
@@ -366,6 +371,20 @@ module.exports.trash = async (req, res) => {
     // Nếu cần lấy danh sách sản phẩm theo điều kiện và phân trang
     const products = await Product.find(find).skip(skip).limit(limitItems);
 
+    for (const item of products) {
+      const infoDeleted = await Account.findOne({
+        _id: item.deletedBy
+      });
+      if(infoDeleted) {
+        item.deletedByFullName = infoDeleted.fullName;
+      } else {
+        item.deletedByFullName = "";
+      }
+      if(item.deletedAt) {
+        item.deletedAtFormat = moment(item.deletedAt).format("HH:mm - DD/MM/YY");
+      }
+      
+    }
     res.render("admin/pages/products/trash", {
       pageTitle: "Thùng rác",
       trashProducts: products,

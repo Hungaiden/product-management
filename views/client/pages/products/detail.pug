@@ -13,14 +13,15 @@ block main
             div(class="inner-category")
               span Danh mục: 
               a(href=`/products/${product.category.slug}`) #{product.category.title}
-          if (product.priceNew)
-            div(class="inner-price-new") #{product.priceNew} ₫
-          if (product.price)
-            div(class="inner-price-old") #{product.price} ₫
+          if (product.newPrice)
+            div(class="inner-price-new") Giá ưu đãi: #{product.newPrice} ₫
+          if (product.priceFormatted)
+            div(class="inner-price-old") Giá gốc: #{product.priceFormatted} ₫
           if (product.discountPercentage)
-            div(class="inner-percent") Giảm tới <span>#{product.discountPercentage}%</span>
+            div(class="inner-percent") Giảm tới: <span>#{product.discountPercentage}%</span>
           if (product.stock)
-            div(class="inner-stock") Còn lại <span>#{product.stock}</span> sản phẩm
+            div(class="inner-stock") Còn lại: <span>#{product.stock}</span> sản phẩm
+          
           form(
             action=`/cart/add/${product.id}`
             method="POST"

@@ -1,23 +1,22 @@
-extends ../../layouts/default.pug
+extends ../../layouts/default.pug 
+
 block main
-    if(role.permissions.includes("accounts_view"))
-        h1(class="mb-4") #{pageTitle}
+  .profile-container
+    h1(class="profile-title") #{pageTitle}
+    .profile-content
+      .profile-avatar
         if (user.avatar)
-            img(src=user.avatar width="150px" class="mb-3")
+          img(src=user.avatar width="150px" class="avatar")
+      .profile-info
         if (user.fullName)
-            p Họ tên: <b>#{user.fullName}</b>
+          p Họ tên: <b>#{user.fullName}</b>
         if (user.email)
-            p Email: <b>#{user.email}</b>
+          p Email: <b>#{user.email}</b>
         if (user.phone)
-            p Số điện thoại: <b>#{user.phone}</b>
+          p Số điện thoại: <b>#{user.phone}</b>
         p 
-            span Trạng thái: 
-            span
+          span Trạng thái: 
+          span
             <b>#{user.status === "active" ? "Hoạt động": "Dừng hoạt động"}</b>
         if (role.title)
-            p Phân quyền: <b>#{role.title}</b>
-        if(role.permissions.includes("accounts_edit"))
-            a(
-                href=`/${prefixAdmin}/accounts/my-profile/edit`
-                class = "btn btn-warning "
-                ) Chỉnh sửa
+          p Phân quyền: <b>#{role.title}</b>

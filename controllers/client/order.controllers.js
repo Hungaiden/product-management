@@ -7,8 +7,11 @@ module.exports.index = async (req, res) => {
   const cart = await Cart.findOne({
     _id: cartId
   });
+
   const products = cart.products;
+
   let total = 0;
+
   for (const item of products) {
     const infoItem = await Product.findOne({
       _id: item.productId,
@@ -18,14 +21,19 @@ module.exports.index = async (req, res) => {
     item.thumbnail = infoItem.thumbnail;
     item.title = infoItem.title;
     item.slug = infoItem.slug;
-    item.priceNew = infoItem.price;
+    item.newPrice = infoItem.price;
     if(infoItem.discountPercentage > 0) {
-      item.priceNew = (1 - infoItem.discountPercentage/100) * infoItem.price;
-      item.priceNew = item.priceNew.toFixed(0);
+      item.newPrice = (1 - infoItem.discountPercentage/100) * infoItem.price;
     }
-    item.total = item.priceNew * item.quantity;
+    item.total = item.newPrice * item.quantity;
+
+    // định dạng format tiền
+    item.newPriceFormat = item.newPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ','); 
+    item.totalFormat = item.total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');    
     total += item.total;
   }
+
+  totalFormat = total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   res.render("client/pages/order/index", {
     pageTitle: "Đặt hàng",
     products: products,
@@ -91,14 +99,19 @@ module.exports.success = async (req, res) => {
     item.thumbnail = infoItem.thumbnail;
     item.title = infoItem.title;
     item.slug = infoItem.slug;
-    item.priceNew = item.price;
+    item.newPrice = item.price;
     if(item.discountPercentage > 0) {
-      item.priceNew = (1 - item.discountPercentage/100) * item.price;
-      item.priceNew = item.priceNew.toFixed(0);
+      item.newPrice = (1 - item.discountPercentage/100) * item.price;
+      
     }
-    item.total = item.priceNew * item.quantity;
+    item.total = item.newPrice * item.quantity;
+    // định dạng format tiền
+    item.newPriceFormat = item.newPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ','); 
+    item.totalFormat = item.total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');    
     total += item.total;
   }
+
+  totalFormat = total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   res.render("client/pages/order/success", {
     pageTitle: "Đặt hàng thành công",
     order: order,

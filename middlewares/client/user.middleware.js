@@ -7,6 +7,7 @@ module.exports.infoUser = async (req, res, next) => {
       deleted: false,
       status: "active"
     });
+    
     if(user) {
       res.locals.user = user;
     }

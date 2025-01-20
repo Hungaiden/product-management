@@ -6,7 +6,7 @@ module.exports.index = async(req, res) => {
     deleted: false
   });
 
-
+  
   res.render("admin/pages/products-category/index", {
     listCategory: listCategory,
     pageTitle: "Danh sách danh mục sản phẩm"
@@ -23,14 +23,16 @@ module.exports.create = async (req, res) => {
     listCategory: listCategory
   });
 }
+
 module.exports.createPost = async (req, res) => {
-  if(res.locals.role.permissions.includes("product-category_create")){
+  if(res.locals.role.permissions.includes("products-category_create")){
     if(req.body.position) {
       req.body.position = parseInt(req.body.position);
     } else {
       const countRecord = await ProductCategory.countDocuments();
       req.body.position = countRecord + 1;
     }
+
     const record = new ProductCategory(req.body); 
     await record.save();
     
@@ -39,7 +41,7 @@ module.exports.createPost = async (req, res) => {
 }
 
 module.exports.edit = async (req, res) => {
-  if(res.locals.role.permissions.includes("products_edit")) {
+  if(res.locals.role.permissions.includes("products-category_edit")) {
     const id = req.params.id;
     
     const category = await ProductCategory.findOne({
@@ -50,19 +52,20 @@ module.exports.edit = async (req, res) => {
     const listCategory = await ProductCategory.find({
       deleted: false
     });
+
+    res.render(
+      "admin/pages/products-category/edit", {
+        pageTitle: "Chỉnh sửa danh mục sản phẩm",
+        listCategory: listCategory,
+        category: category
+      }
+    );
   }
 
-  res.render(
-    "admin/pages/products-category/edit", {
-      pageTitle: "Chỉnh sửa danh mục sản phẩm",
-      listCategory: listCategory,
-      category: category
-    }
-  );
 }
 
 module.exports.editPatch = async(req, res) => {
-  if(res.locals.role.permissions.includes("product-category_edit")) {
+  if(res.locals.role.permissions.includes("products-category_edit")) {
     const id = req.params.id;
 
     if(req.body.position) {
@@ -76,21 +79,22 @@ module.exports.editPatch = async(req, res) => {
     }, req.body);
 
     req.flash("success", "Thay đổi thành công");
-    res.redirect("back");
+    
   }
+  res.redirect("back");
 }
 
 module.exports.detail = async (req, res) => {
-  if(res.locals.role.permissions.includes("product-category_view")) {
+  if(res.locals.role.permissions.includes("products-category_view")) {
     const id = req.params.id;
     
     const productCategory = await ProductCategory.findOne({
       _id: id,
       deleted: false
     });
-    var productCategoryParent;
+    let productCategoryParent;
     if(productCategory.parent_id) {
-      const productCategoryParent = await ProductCategory.findOne({
+      productCategoryParent = await ProductCategory.findOne({
         _id: productCategory.parent_id,
         deleted: false
       });
@@ -105,7 +109,7 @@ module.exports.detail = async (req, res) => {
 }
 
 module.exports.delete = async (req, res) => {
-  if(res.locals.role.permissions.includes("product-category_delete")) {
+  if(res.locals.role.permissions.includes("products-category_delete")) {
     await ProductCategory.updateOne({
       _id: req.params.id
     },{

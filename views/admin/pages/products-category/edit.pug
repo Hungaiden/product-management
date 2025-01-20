@@ -27,7 +27,7 @@ block main
           option(value = "") -- Chọn danh mục --
           each item in listCategory 
               option(
-                  value = "item.id",
+                  value = item.id
                   selected = item.id == category.parent_id ? true : false
                   ) #{item.title}
       div(class="form-group")

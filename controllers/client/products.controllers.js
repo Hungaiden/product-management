@@ -12,11 +12,9 @@ module.exports.index = async (req, res) => {
     });
 
   for (const item of products) {
-    item.priceNew = item.price*(100 - item.discountPercentage)/100;
-    item.priceNew = (item.priceNew).toFixed(0);
-    item.price = (item.price).toFixed(0);
-    item.price = numeral(item.price).format('0,0');
-    item.priceNew = numeral(item.priceNew).format('0,0');
+    item.newPrice = item.price*(100 - item.discountPercentage)/100;
+    item.newPrice = item.newPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Cách 1: Tự định dạng
+    item.priceFormatted = item.price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
   
@@ -36,7 +34,8 @@ module.exports.detail = async (req, res) => {
       status: "active",
       deleted: false
     });
-
+  
+  
   if(product.category_id) {
     const category = await ProductCategory.findOne({
       _id: product.category_id,
@@ -46,12 +45,10 @@ module.exports.detail = async (req, res) => {
     product.category = category;
   }
   
-  product.priceNew = product.price *(100 - product.discountPercentage)/100;
-  product.priceNew = (product.priceNew).toFixed(0);
-  product.priceNew = numeral(product.priceNew).format('0,0'); 
-
-  product.price = (product.price).toFixed(0);
-  product.price = numeral(product.price).format('0,0'); 
+  product.newPrice = product.price *(100 - product.discountPercentage)/100;
+  product.newPrice = product.newPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Cách 1: Tự định dạng
+  product.priceFormatted = product.price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+   
 
   res.render("client/pages/products/detail", {
     pageTitle: product.title,
@@ -89,10 +86,13 @@ module.exports.category = async (req, res) => {
     status: "active",
     deleted: false
   }).sort({ position: "desc" });
-  for (const product of products) {
-    product.priceNew = product.price*(100 - product.discountPercentage)/100;
-    product.priceNew = (product.priceNew).toFixed(0);
+  
+  for (const item of products) {
+    item.newPrice = item.price*(100 - item.discountPercentage)/100;
+    item.newPrice = item.newPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Cách 1: Tự định dạng
+    item.priceFormatted = item.price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
+
   res.render("client/pages/products/index", {
     pageTitle: category.title,
     products: products
@@ -113,9 +113,11 @@ module.exports.search = async (req, res) => {
         status: "active"
       })
       .sort({ position: "desc" });
+    
     for (const item of products) {
-      item.priceNew = (1 - item.discountPercentage/100) * item.price;
-      item.priceNew = item.priceNew.toFixed(0);
+      item.newPrice = item.price*(100 - item.discountPercentage)/100;
+      item.newPrice = item.newPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Cách 1: Tự định dạng
+      item.priceFormatted = item.price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
   }
 

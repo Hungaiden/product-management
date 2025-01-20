@@ -8,6 +8,7 @@ module.exports.index = async (req, res) => {
   });
   const products = cart.products;
   let total = 0;
+  let totalFormat;
   for (const item of products) {
     const infoItem = await Product.findOne({
       _id: item.productId,
@@ -17,18 +18,26 @@ module.exports.index = async (req, res) => {
     item.thumbnail = infoItem.thumbnail;
     item.title = infoItem.title;
     item.slug = infoItem.slug;
-    item.priceNew = infoItem.price;
+    item.newPrice = infoItem.price;
+
     if(infoItem.discountPercentage > 0) {
-      item.priceNew = (1 - infoItem.discountPercentage/100) * infoItem.price;
-      item.priceNew = item.priceNew.toFixed(0);
+      item.newPrice = (1 - infoItem.discountPercentage/100) * infoItem.price;     
     }
-    item.total = item.priceNew * item.quantity;
+    // tổng tiền từng món hàng
+    item.total = item.newPrice * item.quantity;
+    
+    // tổng tiền thanh toán
     total += item.total;
+    // định dạng format tiền
+    item.newPriceFormat = item.newPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ','); 
+    item.totalFormat = item.total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');    
   }
+  totalFormat = total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
   res.render("client/pages/cart/index", {
     pageTitle: "Giỏ hàng",
     products: products,
-    total: total
+    totalFormat: totalFormat
   });
 };
 
@@ -44,6 +53,8 @@ module.exports.delete = async (req, res) => {
   }, {
     products: products
   });
+
+  req.flash('success', 'Xoá sản phẩm thành công!');
   res.redirect("back");
 }
 
@@ -86,7 +97,7 @@ module.exports.updatePatch = async (req, res) => {
   const products = cart.products;
   const productUpdate = products.find(item => item.productId == product.productId);
 
-  productUpdate.quantity = parseInt(product.quantity);
+  productUpdate.quantity = parseInt(product.quantity); // hàm find trả về tham chiếu của phần tử nên sẽ thay đổi trực tiếp
 
   await Cart.updateOne({
     _id: cartId

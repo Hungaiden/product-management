@@ -103,7 +103,7 @@ block main
                       height="auto"
                     )
                   td #{item.title}
-                  td #{item.price} ₫
+                  td #{item.priceFormatted} ₫
                   td
                     if(role.permissions.includes("products_edit"))
                       input(

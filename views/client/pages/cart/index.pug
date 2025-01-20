@@ -26,7 +26,7 @@ block main
                     img(src=item.thumbnail, alt=item.title width="80px")
                   td
                     a(href=`/products/detail/${item.slug}`) #{item.title}
-                  td #{item.priceNew}$
+                  td #{item.newPriceFormat} ₫
                   td
                     input(
                       type="number"
@@ -36,14 +36,14 @@ block main
                       item-id=item.productId
                       style="width: 60px"
                     )
-                  td #{item.total.toLocaleString()}$
+                  td #{item.totalFormat} ₫
                   td
                     a(
                       href=`/cart/delete/${item.productId}`
                       class="btn btn-danger"
                     ) Xóa
           
-          h3(class="text-right") Tổng đơn hàng: #{total.toLocaleString()}$
+          h3(class="text-right") Tổng đơn hàng: #{totalFormat} ₫
           
           div(class="text-right mt-3")
             a(href="/order" class="btn btn-success") Đặt hàng

@@ -8,11 +8,11 @@ block main
         table.table.table-hover.table-sm
           thead
             tr
-              th 
               th STT
               th Hình ảnh
               th Tiêu đề
               th Giá
+              th Xoá bởi
               th Hành động
 
           tbody
@@ -29,6 +29,9 @@ block main
                   )
                 td #{item.title}
                 td #{item.price}$
+                td 
+                  div #{item.deletedByFullName}
+                  div #{item.deletedAtFormat}
                 td
                   if(role.permissions.includes("products_edit"))
                     button(
