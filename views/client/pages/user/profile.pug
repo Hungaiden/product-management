@@ -1,0 +1,16 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+block main
+  .container.my-5
+    .row.justify-content-center
+      .col-lg-8
+        +box-head("Thông tin cá nhân")
+        .row.align-items-center.mb-4
+          .col-md-4.text-center
+            
+          .col-md-8
+            h3.text-primary #{user.fullName}
+            p.text-muted.mb-1 Email: #{user.email}
+            p.text-muted.mb-1 Phone: #{user.phone}
+            p.text-muted.mb-1 Status: #{user.status}
+        

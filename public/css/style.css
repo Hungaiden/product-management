@@ -332,6 +332,46 @@
 }
 /* End alert-message */
 
+
+/*user information*/
+.container {
+  margin-top: 50px;
+}
+
+.text-primary {
+  color: #007bff !important;
+  font-weight: bold;
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+.rounded-circle {
+  border-radius: 50% !important;
+}
+
+.border {
+  border: 2px solid #dee2e6 !important;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* End user information*/
+
+
 /* chat */
 .chat {
   width: 100%;
