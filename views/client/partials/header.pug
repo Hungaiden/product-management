@@ -2,47 +2,45 @@ include ../mixins/sub-category.pug
 header.header
   .container
     .row.align-items-center
-      .col-3
+      .col-auto
         .inner-logo
           a(href="/")
             img(src=settingGeneral.logo, alt="Logo")
 
-      .col-5
-        form(
-          action="/products/search"
-          method="GET"
-        ) 
-          div(class="form-group d-flex mb-0")
-            input(
-              type="text"
-              placeholder="Nhập từ khóa..."
-              class="form-control"
-              name="keyword"
-              value=keyword
-            )
-            button(
-              type="submit"
-              class="btn btn-primary"
-            ) Tìm
-      
-      .col-4
+      .col
+        form(action="/products/search" method="GET" class="search-form d-flex")
+          input(
+            type="text"
+            placeholder="Bạn muốn tìm kiếm gì ? "
+            class="form-control search-input"
+            name="keyword"
+            value=keyword
+          )
+          button(
+            type="submit"
+            class="btn btn-primary search-button"
+          ) Tìm kiếm
+
+      .col-auto
         .inner-menu
-          ul
-            li
-              a(href="/") Trang chủ
-            li(class="sub-menu")
-              a(href="/products") Sản phẩm
-              +sub-category(allCategory)
-            li
-              a(href="/cart") Giỏ hàng (#{miniCart})
+          ul.nav
+            li.nav-item
+              a.nav-link(href="/") Trang chủ
+            li.nav-item.dropdown
+              a.nav-link.dropdown-toggle(href="/products" role="button" data-toggle="dropdown" aria-expanded="false") Sản phẩm
+              ul.dropdown-menu
+                +sub-category(allCategory)
+            li.nav-item
+              a.nav-link(href="/cart") Giỏ hàng (#{miniCart})
             if(user)
-              li
-                a(href="/user/profile") #{user.fullName}
-              li
-                a(href="/chat") Chat
-              li
-                a(href="/user/logout") Đăng xuất
-            li
-              a(href="/user/login") Đăng nhập
-            li
-              a(href="/user/register") Đăng ký
+              li.nav-item
+                a.nav-link(href="/user/profile") #{user.fullName}
+              li.nav-item
+                a.nav-link(href="/chat") Chat
+              li.nav-item
+                a.nav-link(href="/user/logout") Đăng xuất
+            else
+              li.nav-item
+                a.nav-link(href="/user/login") Đăng nhập
+              li.nav-item
+                a.nav-link(href="/user/register") Đăng ký

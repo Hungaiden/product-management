@@ -1,16 +1,21 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
 block main
-  .container.my-5
-    .row.justify-content-center
-      .col-lg-8
-        +box-head("Thông tin cá nhân")
-        .row.align-items-center.mb-4
-          .col-md-4.text-center
+  .row.mt-4
+      .col-12
+        .card.mb-4
+          .card-header Thông tin tài khoản
+          .card-body
+            if(user.avatar)
+              img(
+                src=user.avatar
+                style="height: 100px;margin-bottom: 15px;"
+              )
+            if(user.fullName)
+              p Họ tên: <b>#{user.fullName}</b>
+            if(user.email)
+              p Email: <b>#{user.email}</b>
+            if(user.phone)
+              p Số điện thoại: <b>#{user.phone}</b>
             
-          .col-md-8
-            h3.text-primary #{user.fullName}
-            p.text-muted.mb-1 Email: #{user.email}
-            p.text-muted.mb-1 Phone: #{user.phone}
-            p.text-muted.mb-1 Status: #{user.status}
         

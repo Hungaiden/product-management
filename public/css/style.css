@@ -1,94 +1,108 @@
 /* Header */
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #ddd;
-  padding: 15px 20px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 /* Logo */
 .header .inner-logo img {
-  max-height: 60px; /* Giảm chiều cao logo */
-  margin-left: 10px; /* Điều chỉnh khoảng cách */
+  max-height: 50px;
 }
 
 /* Search Form */
-.header form {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%; /* Đảm bảo form chiếm toàn bộ không gian có sẵn */
-  max-width: 600px; /* Giới hạn chiều rộng tối đa của form */
-  margin: 0 auto; /* Căn giữa form */
+.search-form {
+  max-width: 500px;
+  margin: 0 auto;
 }
 
-.header form .form-control {
-  width: calc(100% - 80px); /* Tăng chiều rộng input, trừ đi chiều rộng nút */
+.search-input {
+  flex: 1;
   border-radius: 20px 0 0 20px;
-  padding: 0.5rem 1rem; /* Điều chỉnh padding để cân đối hơn */
-  font-size: 16px; /* Tăng kích thước chữ */
+  border: 1px solid #ddd;
+  padding: 0.5rem 1rem;
+  font-size: 14px;
 }
 
-.header form .btn {
+.search-button {
   border-radius: 0 20px 20px 0;
-  padding: 0.5rem 1.5rem; /* Điều chỉnh padding nút */
   background-color: #007bff;
   color: #fff;
-  font-size: 16px; /* Tăng kích thước chữ nút */
-  transition: all 0.3s ease;
+  font-size: 14px;
+  padding: 0.5rem 1rem;
+  border: none;
+  transition: background-color 0.3s;
 }
 
-.header form .btn:hover {
+.search-button:hover {
   background-color: #0056b3;
 }
-/* End Search Form */
-
-
 
 /* Menu */
-.header .inner-menu > ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.inner-menu .nav {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
+  gap: 15px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.header .inner-menu > ul > li {
-  margin-left: 15px; /* Giảm khoảng cách giữa các mục */
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  font-weight: bold;
+.nav-item .nav-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+  padding: 5px 10px;
+  transition: color 0.3s;
 }
+
+.nav-item .nav-link:hover {
+  color: #007bff;
+}
+
+/* Dropdown Enhancements */
+.dropdown-menu {
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  padding: 0.5rem 1rem;
+}
+
+.dropdown-menu a {
+  color: #333;
+  text-decoration: none;
+  padding: 5px 10px;
+  display: block;
+}
+
+.dropdown-menu a:hover {
+  background-color: #f8f9fa;
+  color: #007bff;
+}
+
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .header {
-    flex-direction: column;
-    padding: 10px 0;
+    padding: 10px;
   }
 
-  .header .inner-logo {
-    margin-bottom: 15px;
+  .inner-logo {
+    text-align: center;
+    margin-bottom: 10px;
   }
 
-  .header form {
+  .search-form {
     width: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
   }
 
-  .header .inner-menu > ul {
+  .inner-menu .nav {
     flex-direction: column;
     align-items: center;
-  }
-
-  .header .inner-menu > ul > li {
-    margin: 10px 0;
+    gap: 10px;
   }
 }
 /* End header */
