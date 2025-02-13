@@ -1,0 +1,21 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-filter.pug
+block main
+  if(role.permissions.includes("accounts_view"))
+    if (accounts.fullName)
+      h1(class="mb-4") #{accounts.fullName}
+    if (accounts.avatar)
+      div(class="mb-4")
+        img(
+          src=accounts.avatar
+          style="width: 100px"
+        )
+    if (accounts.status)
+      div(class="mb-4")
+        span Trạng thái :
+        if (accounts.status === "active")
+          span(class="badge badge-success") Hoạt động
+        else
+          span(class="badge badge-danger") Dừng hoạt động
+    if (accounts.role_id)
+      div(class="mb-4") Chức vụ: <b> #{role.title} </b>

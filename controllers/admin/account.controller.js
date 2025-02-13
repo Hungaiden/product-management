@@ -73,6 +73,38 @@ module.exports.editPatch = async(req, res) => {
   res.redirect("back");
 }
 
+module.exports.detail = async (req, res) => {
+  const id = req.params.id;
+  
+  const accounts = await Account.findOne({
+    deleted: false,
+    _id: id
+  });
+
+  
+  res.render("admin/pages/account/detail", {
+    pageTitle: "Chỉnh sửa tài khoản",
+    accounts: accounts,
+  })
+}
+
+module.exports.delete = async (req, res) => {
+  if(res.locals.role.permissions.includes("accounts_delete")) {
+    await Account.updateOne({
+      _id: req.params.id
+    },{
+      deleted: true,
+    }
+    );
+
+    req.flash('success', 'Xoá thành công!');
+
+    res.json({
+      code: "success"
+    });
+  }
+}
+
 module.exports.changePassword = async (req, res) => {
   const account = await Account.findOne({
     _id: req.params.id,

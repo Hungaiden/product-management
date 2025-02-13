@@ -10,17 +10,19 @@ module.exports.general = async (req, res) => {
 };
 
 module.exports.generalPatch = async (req, res) => {
-  const existRecord = await Setting.findOne({});
+  if(res.locals.role.permissions.includes("settings_edit")){
+    const existRecord = await Setting.findOne({});
 
-  if(existRecord) {
-    await Setting.updateOne({
-      _id: existRecord.id
-    }, req.body);
-  } else {
-    const record = new Setting(req.body);
-    await record.save();
+    if(existRecord) {
+      await Setting.updateOne({
+        _id: existRecord.id
+      }, req.body);
+    } else {
+      const record = new Setting(req.body);
+      await record.save();
+    }
+    
+    req.flash("success", "Cập nhật thành công!");
   }
-
-  req.flash("success", "Cập nhật thành công!");
   res.redirect("back");
 };

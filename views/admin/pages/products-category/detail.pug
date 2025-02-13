@@ -1,25 +1,25 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-filter.pug
 block main
-  if(role.permissions.includes("products_view"))
-    if (productCategory.title)
-      h1(class="mb-4") #{productCategory.title}
-    if (productCategory.thumbnail)
-      div(class="mb-4")
-        img(
-          src=productCategory.thumbnail
-          style="width: 100px"
-        )
-    if (productCategory.status)
-      div(class="mb-4")
-        span Trạng thái:
-        if (productCategory.status === "active")
-          span(class="badge badge-success") <b>Hoạt động</b>
-        else
-          span(class="badge badge-danger") <b>Dừng hoạt động</b>
-    if (productCategory.position)
-      div(class="mb-4") Vị trí: <b>#{productCategory.position}</b>
-    if (productCategory.description)
-      div(class="mb-4") THÔNG TIN SẢN PHẨM: <b>!{productCategory.description}</b>
-    if (productCategory.parent_id) 
-        div(class="mb-4") Danh Mục Cha: <b>#{ productCategoryParent.title}</b>
+    if(role.permissions.includes("products-category_view"))
+      if (productCategory.title)
+        h1(class="mb-4") #{productCategory.title}
+      if (productCategory.thumbnail)
+        div(class="mb-4") Hình ảnh :
+          img(
+            src=productCategory.thumbnail
+            style="width: 100px"
+          ) 
+      if (productCategory.status)
+        div(class="mb-4")
+          span Trạng thái :
+          if (productCategory.status === "active")
+            span(class="badge badge-success") <b>Hoạt động</b>
+          else
+            span(class="badge badge-danger") <b>Dừng hoạt động</b>
+      if (productCategory.position)
+        div(class="mb-4") Vị trí : <b>#{productCategory.position}</b>
+      if (productCategory.description)
+        div(class="mb-4") Mô tả danh mục : <b>!{productCategory.description}</b>
+      if (productCategory.parent_id) 
+          div(class="mb-4") Danh Mục Cha : <b>#{ productCategoryParent.title}</b>

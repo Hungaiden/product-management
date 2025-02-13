@@ -2,6 +2,7 @@ const express = require("express"); // nhung express
 const app = express();
 
 var path = require('path');  // để dùng tiny mce
+
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
 const cookieParser = require('cookie-parser');

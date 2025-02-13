@@ -17,6 +17,8 @@ router.post(
     uploadCloud.uploadSingle,
     controller.createPost);
 
+router.get("/detail/:id", controller.detail);
+
 router.get("/edit/:id", controller.edit);
 
 router.patch(
@@ -25,6 +27,8 @@ router.patch(
     uploadCloud.uploadSingle,
     controller.editPatch
 );
+
+router.patch("/delete/:id", controller.delete);
 
 router.get("/change-password/:id", controller.changePassword);
 
@@ -39,5 +43,7 @@ router.patch(
     upload.single('avatar'),
     uploadCloud.uploadSingle,
     controller.editProfilePatch);
+
+
 
 module.exports = router;

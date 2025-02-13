@@ -137,4 +137,20 @@ block main
               input(type="checkbox" data-id=item.id)
         //- Hết tai khoan
 
+        //- Cai dat chung
+        tr
+          td(colspan="4")
+            b Cài đặt chung
+        tr(data-name="settings_view")
+          td Xem
+          each item in records
+            td(class="text-center")
+              input(type="checkbox" data-id=item.id)
+        tr(data-name="settings_edit")
+          td Chỉnh sửa
+          each item in records
+            td(class="text-center")
+              input(type="checkbox" data-id=item.id)
+        //- Hết tai khoan
+
 
