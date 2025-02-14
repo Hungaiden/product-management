@@ -17,11 +17,16 @@ Key features include:
 ✅ **User Panel:**  
 - Register, log in, browse products, add to cart, place orders.  
 - View order history and manage personal details.  
+- 🔗 [Demo Link](https://hungweb.up.railway.app/)
 
 ✅ **Admin Dashboard:**  
 - Manage users (create, edit, delete, authorize).  
 - Manage products and categories.  
 - Process and track orders.  
 - Management authorization system
+- 🔗 [Admin Demo Link](https://hungweb.up.railway.app/admin/auth)
 
+### 🛠 Admin Login Credentials  
+**Username:** `duchungbui1@gmail.com`  
+**Password:** `123456`  
 
