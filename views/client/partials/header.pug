@@ -27,16 +27,21 @@ header.header
             li.nav-item
               a.nav-link(href="/") Trang chủ
             li.nav-item.dropdown
-              a.nav-link.dropdown-toggle(href="/products" role="button" data-toggle="dropdown" aria-expanded="false") Sản phẩm
+              a.nav-link.dropdown-toggle(href="/products" role="button" data-toggle="dropdown" aria-expanded="false") 
+                | Sản phẩm
+                i.fas.fa-chevron-down
               ul.dropdown-menu
                 +sub-category(allCategory)
             li.nav-item
-              a.nav-link(href="/cart") Giỏ hàng (#{miniCart})
+              a.nav-link.cart-link(href="/cart")
+                i.fas.fa-shopping-cart
+                | Giỏ hàng 
+                span.cart-count  #{miniCart}
             if(user)
               li.nav-item
-                a.nav-link(href="/user/profile") #{user.fullName}
-              li.nav-item
-                a.nav-link(href="/chat") Chat
+                a.nav-link(href="/user/profile")
+                  i.fas.fa-user
+                  |  #{user.fullName}
               li.nav-item
                 a.nav-link(href="/user/logout") Đăng xuất
             else

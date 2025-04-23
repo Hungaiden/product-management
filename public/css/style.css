@@ -1,6 +1,10 @@
+body {
+  background-color: #FFFFFF ;
+}
+
 /* Header */
 .header {
-  background-color: #ffffff;
+  background-color:#F5F5F5;
   border-bottom: 1px solid #e5e5e5;
   padding: 10px 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -9,6 +13,7 @@
 /* Logo */
 .header .inner-logo img {
   max-height: 50px;
+  display: block;         /* Tránh ảnh bị lệch do inline */
 }
 
 /* Search Form */
